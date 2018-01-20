@@ -1,0 +1,164 @@
+% !TeX spellcheck = en_US
+%使用中文:方法1
+\documentclass{article}
+\usepackage[UTF8]{ctex}
+%这里是导言区
+%
+\title{Git实践}
+\author{Bruce}
+\date{\today}
+\usepackage{graphicx}
+%设置页边距
+\usepackage{geometry}
+%\geometry{papersize={20cm,15cm}}
+\geometry{left=1cm,right=2cm,top=3cm,bottom=4cm}
+%设置页眉页脚
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\author}
+\chead{\today}
+\rhead{}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headwidth}{\textwidth}
+\renewcommand{\footrulewidth}{0pt}
+
+\usepackage[american]{babel}
+\usepackage{microtype}
+\usepackage{savesym}
+
+\usepackage[bookmarks, colorlinks=true, linkcolor=black, 
+    plainpages = false,pdfpagemode = UseNone, pdfstartview = FitH, 
+    citecolor = ac, urlcolor = ac, filecolor = ac]{hyperref}
+
+%行间距
+\usepackage{setspace}
+\onehalfspacing
+
+%段间距
+\addtolength{\parskip}{.4em}
+
+%插入源代码 method 1
+\usepackage{minted}
+
+%插入源代码 method 2
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{ 
+    language=c++,
+    showspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=shadowbox, %single
+    framerule=1pt,
+    framexleftmargin=5mm,
+    framexrightmargin=5mm,
+    framextopmargin=5mm,
+    framexbottommargin=5mm,
+    numbers=left,
+    numberstyle=\small\color{gray}, %\small    
+    captionpos=b,
+    rulecolor=\color{black},
+    rulesepcolor= \color{ red!20!green!20!blue!20} ,
+	backgroundcolor=\color{white},
+    escapeinside=``, % 英文分号中可写入中文
+    basicstyle=\footnotesize, %\tt
+    directivestyle=\tt,
+    identifierstyle=\tt,
+    commentstyle=\tt,
+    stringstyle=\tt,
+    keywordstyle=\color{blue}\tt
+}
+
+%设置代码字体
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\newminted{cpp}{gobble=2}
+
+%算法
+%\usepackage[ruled]{algorithm2e}
+
+%%%%%正文开始%%%%%%
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage
+
+
+\section{Git配置}
+\subsection{设置用户名和邮件地址}
+
+\subsection{设置别名}
+
+\subsection{开启颜色显示}
+
+\subsection{删除配置}
+ 
+\section{常用命令}
+
+\subsection{暂存区}
+
+\subsection{重置}
+
+\subsection{检出}
+
+\section{最佳实践}
+
+\subsection{备份git库}
+场景:当已经存在一个git库，为了防止代码库被误删，比较好的做法就是在本地建立一个备份，并经常与代码库同步。
+步骤如下：假设已经存在git代码库为[/home/caogh1/workspace/hub],备份库位置:[/media/back]
+
+<1> 使用git init命令创建一个空的裸版本库
+\begin{cppcode}
+       git init --bare /media/back/hub.git
+\end{cppcode}
+
+<2> 使用push命令为其创建内容
+\begin{cppcode}
+       cd /home/caogh1/workspace/hub
+       git push --set-upstream /media/back/hub.git master
+\end{cppcode}
+
+<3> 更新工作区内容，使用git push与备份库同步
+\begin{cppcode}
+       git push
+\end{cppcode}
+
+\subsection{处理分离头指针}
+场景:当HEAD处于分离头指针时，处理如下。"分离头指针"状态指的就是HEAD头指针指向了一个具体的提交ID，而不是一个引用(分支)。
+
+git checkout master
+
+如果在"分离头指针模式"下有提交，不能通过master分支或其他引用访问。如果提交是master分支所需要的，可以使用合并操作(git merge)，具体操作过程如下:
+
+<1> 确认当前处于master分支;
+
+\begin{cppcode}
+      git branch -v
+\end{cppcode}
+
+<2> 执行合并操作，将提交合并到当前分支;
+
+\begin{cppcode}
+     git merge <id>
+\end{cppcode}
+
+<3> 仔细看看最新提交，会看到这个提交有两个父提交，这就是合并的奥秘。
+
+\begin{cppcode}
+     git cat-file -p HEAD
+\end{cppcode}
+
+
+
+
+\end{document}
+%%%%%正文结束%%%%%%
