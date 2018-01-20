@@ -1,0 +1,5 @@
+*.aux
+*.out
+git/~$git.docx
+*.gz(busy)
+*.toc
